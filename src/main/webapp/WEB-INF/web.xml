@@ -7,11 +7,15 @@
 
   <display-name>Archetype Created Web Application</display-name>
     <servlet>
-        <servlet-name>spiegelproxy</servlet-name>
-        <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
+        <servlet-name>spiegel</servlet-name>
+        <servlet-class>de.derschimi.proxyservlet.TestServlet</servlet-class>
         <init-param>
             <param-name>targetUri</param-name>
             <param-value>http://www.spiegel.de</param-value>
+        </init-param>
+        <init-param>
+            <param-name>path</param-name>
+            <param-value>spiegel</param-value>
         </init-param>
         <init-param>
             <param-name>log</param-name>
@@ -19,16 +23,20 @@
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>spiegelproxy</servlet-name>
+        <servlet-name>spiegel</servlet-name>
         <url-pattern>/spiegel/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
         <servlet-name>appleproxy</servlet-name>
-        <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
+        <servlet-class>de.derschimi.proxyservlet.TestServlet</servlet-class>
         <init-param>
             <param-name>targetUri</param-name>
             <param-value>http://www.apple.com</param-value>
+        </init-param>
+        <init-param>
+            <param-name>path</param-name>
+            <param-value>appleproxy</param-value>
         </init-param>
         <init-param>
             <param-name>log</param-name>
@@ -39,5 +47,6 @@
         <servlet-name>appleproxy</servlet-name>
         <url-pattern>/appleproxy/*</url-pattern>
     </servlet-mapping>
+
 
 </web-app>
