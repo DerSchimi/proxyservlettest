@@ -56,6 +56,8 @@ import java.util.BitSet;
 import java.util.Enumeration;
 import java.util.Formatter;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -142,6 +144,7 @@ public class TestServlet extends HttpServlet {
         if (doForwardIPString != null) {
             this.doForwardIP = Boolean.parseBoolean(doForwardIPString);
         }
+        path = getConfigParam("path");
 
         initTarget();//sets target*
 
@@ -153,7 +156,6 @@ public class TestServlet extends HttpServlet {
 
     protected void initTarget() throws ServletException {
         targetUri = getConfigParam(P_TARGET_URI);
-        path = getConfigParam("path");
 
         if (targetUri == null)
             throw new ServletException(P_TARGET_URI+" is required.");
@@ -501,27 +503,57 @@ public class TestServlet extends HttpServlet {
     protected void copyResponseEntity(HttpResponse proxyResponse, HttpServletResponse servletResponse) throws IOException {
         HttpEntity entity = proxyResponse.getEntity();
         if (entity != null) {
+
             OutputStream servletOutputStream = servletResponse.getOutputStream();
             if (entity.getContentEncoding() != null) {
-                System.out.println("content: " + entity.getContentEncoding());
+                servletResponse.setCharacterEncoding("UTF-8");
+
                 String charset = entity.getContentType().getValue();
-                System.out.println("charset: "+ charset);
+
+                String charst = charset.substring(charset.lastIndexOf("=")+1);
                 if (entity.getContentEncoding().getValue().equals("gzip")) {
                     InputStream in = entity.getContent();
+
                     InputStream zin = new GZIPInputStream(in);
                     StringWriter writer = new StringWriter();
-                    IOUtils.copy(zin, writer, "UTF-8");
+
+
+                    IOUtils.copy(zin, writer,charst);
                     String theString = writer.toString();
+
+                   // System.out.println(theString);
                     theString = theString.replaceAll("href=\"/", "href=\"/" + path + "/");
                     theString = theString.replaceAll("src=\"/", "src=\"/" + path + "/");
 
+                    // css
+                    String par = "(";
+                    String pattern = "url"+par+"\"/static/";
+                    // replace all uses regex
+                    while (theString.contains(pattern)) {
+                        theString = theString.replace(pattern, "url"+par+"\"/"+path+ "/static/");
+                    }
+                    // css...
+                    String pattern2 = "url"+par+"/static/";
+                    while (theString.contains(pattern2)) {
+                        theString = theString.replace(pattern2, "url"+par+"/"+path+ "/static/");
+                    }
+
+                    // flash :)
+                    String pattern3 = "data=\"/static/";
+                    while (theString.contains(pattern3)) {
+                        theString = theString.replace(pattern3, "data="+"/"+path+ "/static/");
+                    }
 
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
+
                     GZIPOutputStream gzip = new GZIPOutputStream(out);
                     gzip.write(theString.getBytes());
                     gzip.close();
 
                     servletOutputStream.write(out.toByteArray());
+                }
+                else {
+                    System.err.println("not a gzip request:");
                 }
             }
             else {
