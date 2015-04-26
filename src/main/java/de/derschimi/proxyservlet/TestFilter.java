@@ -2,6 +2,7 @@ package de.derschimi.proxyservlet;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -19,8 +20,12 @@ public class TestFilter implements Filter {
         if (request instanceof HttpServletRequest) {
             url = ((HttpServletRequest) request).getRequestURL().toString();
         }
-
+        HttpServletResponse r = (HttpServletResponse) response;
         response.getWriter().write("not allowed");
+        r.sendRedirect( "/" );
+
+
+
         //chain.doFilter(request, response);
 
     }
