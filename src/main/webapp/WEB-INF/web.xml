@@ -47,6 +47,35 @@
         <servlet-name>appleproxy</servlet-name>
         <url-pattern>/appleproxy/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>superbad</servlet-name>
+        <servlet-class>de.derschimi.proxyservlet.TestServlet</servlet-class>
+        <init-param>
+            <param-name>targetUri</param-name>
+            <param-value>http://www.angelfire.com/super/badwebs/</param-value>
+        </init-param>
+        <init-param>
+            <param-name>path</param-name>
+            <param-value>superbad</param-value>
+        </init-param>
+        <init-param>
+            <param-name>log</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>superbad</servlet-name>
+        <url-pattern>/superbad/*</url-pattern>
+    </servlet-mapping>
 
+    <filter>
+        <filter-name>TestFilter</filter-name>
+        <filter-class>de.derschimi.proxyservlet.TestFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>TestFilter</filter-name>
+        <url-pattern>/superbad/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

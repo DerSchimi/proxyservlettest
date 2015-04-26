@@ -518,7 +518,7 @@ public class TestServlet extends HttpServlet {
                     StringWriter writer = new StringWriter();
 
 
-                    IOUtils.copy(zin, writer,charst);
+                    IOUtils.copy(zin, writer,"UTF-8");
                     String theString = writer.toString();
 
                    // System.out.println(theString);
