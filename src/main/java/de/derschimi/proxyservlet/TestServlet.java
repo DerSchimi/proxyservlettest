@@ -537,6 +537,13 @@ public class TestServlet extends HttpServlet {
                     while (theString.contains(pattern2)) {
                         theString = theString.replace(pattern2, "url"+par+"/"+path+ "/static/");
                     }
+                  //  window.location = '/artikel/a-774487.html';
+                   theString = replace(theString,"window.location = '/artikel/","windows.location = '/"+path+"/artikel/");
+                    //a.href = "/video/video
+                    theString = replace(theString,"a.href = \"/video/video","a.href = \"/"+path+"/video/video");
+                    // ("src", "/video/video
+                    theString = replace(theString,"(\"src\", \"/video/video","(\"src\", \""+path+"/video/video");
+
 
                     // flash :)
                     String pattern3 = "data=\"/static/";
@@ -560,6 +567,13 @@ public class TestServlet extends HttpServlet {
                 entity.writeTo(servletOutputStream);
             }
         }
+    }
+    private String replace(String theString, String pattern, String replacement){
+
+        while (theString.contains(pattern)) {
+            theString = theString.replace(pattern, replacement);
+        }
+        return theString;
     }
 
     /** Reads the request URI from {@code servletRequest} and rewrites it, considering targetUri.
